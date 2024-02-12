@@ -19,13 +19,35 @@ if __name__ == "__main__":
     pygame.mixer.init(size=-8, channels=2)
 
     line = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2, SCREEN_RESOLUTION[1] / 2 - 200],
+        [SCREEN_RESOLUTION[0] / 2 + 100, SCREEN_RESOLUTION[1] / 2 - 100],
         3,
         200,
-        Note(440),
+        [Note(440, 50), Note(523, 25), Note(659, 17)],
         (255, 255, 255),
         5,
     )
+    line2 = PolyLine(
+        [SCREEN_RESOLUTION[0] / 2 + 50, SCREEN_RESOLUTION[1] / 2 - 50],
+        4,
+        100,
+        [Note(329, 50), Note(493, 25), Note(587, 17)],
+        (255, 255, 255),
+        5,
+    )
+    line3 = PolyLine(
+        [SCREEN_RESOLUTION[0] / 2 + 150, SCREEN_RESOLUTION[1] / 2 - 200 - 150],
+        5,
+        300,
+        [Note(392, 50), Note(466, 25), Note(587, 17)],
+        (255, 255, 255),
+        5,
+    )
+
+    figures = [
+        line,
+        line2,
+        line3,
+    ]
 
     while running:
         clock.tick(60)
@@ -39,8 +61,9 @@ if __name__ == "__main__":
                     print("space")
 
         screen.fill((0, 0, 0))
-        # line.move()
-        line.draw(screen)
+        for figure in figures:
+            figure.move()
+            figure.draw(screen)
 
         pygame.display.flip()
 
