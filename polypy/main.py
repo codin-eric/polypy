@@ -34,21 +34,19 @@ if __name__ == "__main__":
         (200, 255, 100),
         5,
     )
-
     line4 = PolyLine(
         [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 200],
         4,
         400,
-        [Note(587, 17)],
+        [Note(587, 5)],
         (150, 150, 255),
         5,
     )
-
     line5 = PolyLine(
         [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 300],
         5,
         400,
-        [Note(587, 17)],
+        [Note(587, 5)],
         (255, 100, 100),
         5,
     )
@@ -56,8 +54,8 @@ if __name__ == "__main__":
     figures = [
         line2,
         line3,
-        line4,
-        line5,
+        # line4,
+        # line5,
     ]
 
     while running:

@@ -26,14 +26,13 @@ class Circle:
         self.change_dir(direction)
 
     def change_dir(self, new_dir):
-        scale_factor = self.delta_speed
-        self.speed = [new_dir[0] * scale_factor, new_dir[1] * scale_factor]
+        self.speed = [new_dir[0] * self.delta_speed, new_dir[1] * self.delta_speed]
+        print(np.hypot(self.speed[0], self.speed[1]))
 
     def grow(self):
         self.circle_shadow.append(CircleGrow(self.pos, self.speed, 1))
 
     def move(self):
-        next_pos = [self.pos[0] + self.speed[0], self.pos[1] + self.speed[1]]
         self.pos = [
             self.pos[0] + self.speed[0],
             self.pos[1] + self.speed[1],
@@ -86,21 +85,26 @@ class PolyLine:
         self.color = color
         self.width = width
 
-        circle_speed = [
+        circle_direction = [
             (self.points[1][0] - self.points[0][0]),
             (self.points[1][1] - self.points[0][1]),
         ]
-        self.circle = Circle(self.points[0], self.size, circle_speed, 0.02)
+
+        circle_speed = 0.005 * self.vertex
+        self.circle = Circle(self.points[0], self.size, circle_direction, circle_speed)
 
     # TODO: I think this move logic should be inside the circle
     def move(self):
         self.circle.move()
 
-        a = np.array(self.points[self.next_point])
-        b = np.array(self.circle.pos)
-
-        dist = np.linalg.norm(a - b)
-        if dist <= 1 and dist >= -1:
+        dest = np.array(self.points[self.next_point]) - np.array(
+            self.points[self.next_point - 1]
+        )
+        pos_vec = np.array(self.points[self.next_point - 1]) - np.array(self.circle.pos)
+        dist = math.ceil(np.hypot(dest[0], dest[1]) - np.hypot(pos_vec[0], pos_vec[1]))
+        print(dist)
+        hyp_speed = np.hypot(self.circle.speed[0], self.circle.speed[1])
+        if dist < hyp_speed:
             for sounds in self.note:
                 sounds.play(int(quarter / 2))
             self.circle.grow()
