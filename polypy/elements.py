@@ -28,14 +28,12 @@ class Circle:
     def change_dir(self, new_dir):
         scale_factor = self.delta_speed
         self.speed = [new_dir[0] * scale_factor, new_dir[1] * scale_factor]
-        print(
-            f"speed {math.sqrt(self.speed[0]**2 + self.speed[1]**2)}, self.fig_size {self.fig_size}"
-        )
 
     def grow(self):
         self.circle_shadow.append(CircleGrow(self.pos, self.speed, 1))
 
     def move(self):
+        next_pos = [self.pos[0] + self.speed[0], self.pos[1] + self.speed[1]]
         self.pos = [
             self.pos[0] + self.speed[0],
             self.pos[1] + self.speed[1],
@@ -84,7 +82,6 @@ class PolyLine:
 
             pos = [x, y]
             self.points.append(pos)
-
         self.note = note
         self.color = color
         self.width = width
@@ -97,14 +94,16 @@ class PolyLine:
 
     # TODO: I think this move logic should be inside the circle
     def move(self):
+        self.circle.move()
+
         a = np.array(self.points[self.next_point])
         b = np.array(self.circle.pos)
 
         dist = np.linalg.norm(a - b)
-        if dist <= 5:
+        if dist <= 1 and dist >= -1:
             for sounds in self.note:
                 sounds.play(int(quarter / 2))
-                self.circle.grow()
+            self.circle.grow()
             self.next_point += 1
             if self.next_point >= len(self.points):
                 self.next_point = 1
@@ -113,8 +112,6 @@ class PolyLine:
                 self.points[self.next_point][1] - self.points[self.next_point - 1][1],
             ]
             self.circle.change_dir(new_dir)
-
-        self.circle.move()
 
     def draw(self, screen):
         pygame.draw.lines(screen, self.color, False, self.points, self.width)
