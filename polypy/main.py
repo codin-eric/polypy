@@ -17,7 +17,6 @@ if __name__ == "__main__":
     running = True
 
     pygame.mixer.init(size=-8, channels=2)
-
     line2 = PolyLine(
         [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2],
         2,
@@ -54,8 +53,8 @@ if __name__ == "__main__":
     figures = [
         line2,
         line3,
-        # line4,
-        # line5,
+        line4,
+        line5,
     ]
 
     while running:

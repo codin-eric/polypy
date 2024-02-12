@@ -2,6 +2,11 @@ import numpy as np
 import math
 import pygame
 from constants import ORANGE, quarter
+from decimal import getcontext, Decimal, ROUND_HALF_UP
+
+
+getcontext().rounding = ROUND_HALF_UP
+GLOBAL_SPEED = 0.005
 
 
 class Note:
@@ -27,7 +32,6 @@ class Circle:
 
     def change_dir(self, new_dir):
         self.speed = [new_dir[0] * self.delta_speed, new_dir[1] * self.delta_speed]
-        print(np.hypot(self.speed[0], self.speed[1]))
 
     def grow(self):
         self.circle_shadow.append(CircleGrow(self.pos, self.speed, 1))
@@ -71,14 +75,13 @@ class PolyLine:
         self.vertex = vertex
         self.size = size
         self.next_point = 1
+        self.move_count = 0
 
         angle = np.pi - (np.pi * (vertex - 2)) / vertex
-
         # Calculate the position of the next vertex
         for i in range(0, vertex):
             x = pos[0] + size * np.cos(i * angle + np.pi)
             y = pos[1] + size * np.sin(i * angle + np.pi)
-
             pos = [x, y]
             self.points.append(pos)
         self.note = note
@@ -90,31 +93,50 @@ class PolyLine:
             (self.points[1][1] - self.points[0][1]),
         ]
 
-        circle_speed = 0.005 * self.vertex
+        circle_speed = GLOBAL_SPEED * self.vertex
         self.circle = Circle(self.points[0], self.size, circle_direction, circle_speed)
 
     # TODO: I think this move logic should be inside the circle
     def move(self):
         self.circle.move()
+        self.move_count += 1
 
         dest = np.array(self.points[self.next_point]) - np.array(
             self.points[self.next_point - 1]
         )
         pos_vec = np.array(self.points[self.next_point - 1]) - np.array(self.circle.pos)
-        dist = math.ceil(np.hypot(dest[0], dest[1]) - np.hypot(pos_vec[0], pos_vec[1]))
-        print(dist)
-        hyp_speed = np.hypot(self.circle.speed[0], self.circle.speed[1])
+        dist = round(
+            Decimal(np.hypot(dest[0], dest[1]) - np.hypot(pos_vec[0], pos_vec[1]))
+        )
+        hyp_speed = round(Decimal(np.hypot(self.circle.speed[0], self.circle.speed[1])))
+        # print(f"dists: {dist} - {np.hypot(self.circle.speed[0], self.circle.speed[1])} - {self.vertex}")
+
         if dist < hyp_speed:
+            print(f"dist: {dist} - speed: {hyp_speed} - move_count: {self.move_count})")
+            self.move_count = 0
             for sounds in self.note:
                 sounds.play(int(quarter / 2))
             self.circle.grow()
             self.next_point += 1
+            # check if the list of points is over
             if self.next_point >= len(self.points):
                 self.next_point = 1
+            # calculate the new direction vector
             new_dir = [
                 self.points[self.next_point][0] - self.points[self.next_point - 1][0],
                 self.points[self.next_point][1] - self.points[self.next_point - 1][1],
             ]
+            # set the circle position to the next point
+            self.circle.pos = self.points[self.next_point - 1]
+            # if the dist is not 0 calculate a vector with the oposite direction and rest that to the new pos
+            if dist != 0:
+                vector = np.array(new_dir)
+                v_hat = vector / np.linalg.norm(vector)
+                dist_rest = v_hat * -dist
+                self.circle.pos = [
+                    self.circle.pos[0] + dist_rest[0],
+                    self.circle.pos[1] + dist_rest[1],
+                ]
             self.circle.change_dir(new_dir)
 
     def draw(self, screen):
