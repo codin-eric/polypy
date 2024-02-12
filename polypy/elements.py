@@ -17,18 +17,20 @@ class Note:
 
 
 class Circle:
-    def __init__(self, pos, direction, speed) -> None:
+    def __init__(self, pos, fig_size, direction, speed) -> None:
         self.circle_width = 25
         self.pos = pos
+        self.fig_size = fig_size
         self.delta_speed = speed
         self.circle_shadow = []
         self.change_dir(direction)
 
     def change_dir(self, new_dir):
-        self.speed = [
-            new_dir[0] * self.delta_speed,
-            new_dir[1] * self.delta_speed,
-        ]
+        scale_factor = self.delta_speed
+        self.speed = [new_dir[0] * scale_factor, new_dir[1] * scale_factor]
+        print(
+            f"speed {math.sqrt(self.speed[0]**2 + self.speed[1]**2)}, self.fig_size {self.fig_size}"
+        )
 
     def grow(self):
         self.circle_shadow.append(CircleGrow(self.pos, self.speed, 1))
@@ -46,6 +48,7 @@ class Circle:
     def draw(self, screen):
         for circle in self.circle_shadow:
             circle.draw(screen)
+        # TODO: Speed should be calculated by the total distance
         pygame.draw.circle(screen, ORANGE, self.pos, self.circle_width, 5)
 
 
@@ -54,10 +57,10 @@ class CircleGrow(Circle):
         self.circle_width = 25
         self.pos = pos
         self.delta_speed = speed
-        self.change_dir(direction)
 
     def move(self):
         # grow the circle
+
         self.circle_width += self.delta_speed
 
     def draw(self, screen):
@@ -73,14 +76,14 @@ class PolyLine:
         self.next_point = 1
 
         angle = np.pi - (np.pi * (vertex - 2)) / vertex
-        next_pos = pos
 
-        for i in range(1, vertex + 1):
-            x = next_pos[0] + size * np.cos(i * angle)
-            y = next_pos[1] + size * np.sin(i * angle)
+        # Calculate the position of the next vertex
+        for i in range(0, vertex):
+            x = pos[0] + size * np.cos(i * angle)
+            y = pos[1] + size * np.sin(i * angle)
 
-            next_pos = [math.ceil(x), math.ceil(y)]
-            self.points.append(next_pos)
+            pos = [x, y]
+            self.points.append(pos)
 
         self.note = note
         self.color = color
@@ -90,20 +93,21 @@ class PolyLine:
             (self.points[1][0] - self.points[0][0]),
             (self.points[1][1] - self.points[0][1]),
         ]
-        self.circle = Circle(self.points[0], circle_speed, 0.02)
+        self.circle = Circle(self.points[0], self.size, circle_speed, 0.02)
 
+    # TODO: I think this move logic should be inside the circle
     def move(self):
         a = np.array(self.points[self.next_point])
         b = np.array(self.circle.pos)
 
         dist = np.linalg.norm(a - b)
-        if dist < 10:
+        if dist <= 5:
             for sounds in self.note:
                 sounds.play(int(quarter / 2))
                 self.circle.grow()
             self.next_point += 1
             if self.next_point >= len(self.points):
-                self.next_point = 0
+                self.next_point = 1
             new_dir = [
                 self.points[self.next_point][0] - self.points[self.next_point - 1][0],
                 self.points[self.next_point][1] - self.points[self.next_point - 1][1],
