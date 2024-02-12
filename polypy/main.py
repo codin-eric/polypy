@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
     figures = [
         line,
-        line2,
-        line3,
+        # line2,
+        # line3,
     ]
 
     while running:
