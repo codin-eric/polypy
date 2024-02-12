@@ -1,6 +1,6 @@
 # pygame window and main loop
 import pygame
-from elements import Note, PolyLine
+from elements import Note, SampleNote, PolyLine
 
 
 BPM = 120
@@ -17,44 +17,47 @@ if __name__ == "__main__":
     running = True
 
     pygame.mixer.init(size=-8, channels=2)
-    line2 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2],
-        2,
-        400,
-        [Note(440, 25)],
-        (255, 255, 255),
-        5,
-    )
-    line3 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 150],
-        3,
-        400,
-        [Note(523, 10)],
-        (200, 255, 100),
-        5,
-    )
-    line4 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 200],
-        4,
-        400,
-        [Note(587, 5)],
-        (150, 150, 255),
-        5,
-    )
-    line5 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 300],
-        5,
-        400,
-        [Note(587, 5)],
-        (255, 100, 100),
-        5,
-    )
 
+    wave = Note(440, 25)
+    snare = SampleNote("snare.wav", 25)
+    hi_hat = SampleNote("hi_hat.wav", 25)
+    tom = SampleNote("tom.wav", 25)
+    """
+        
+        PolyLine(
+            [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 150],
+            3,
+            400,
+            [Note(587, 5)],
+            (200, 255, 100),
+            5,
+        ),
+    """
     figures = [
-        line2,
-        line3,
-        line4,
-        line5,
+        PolyLine(
+            [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2],
+            2,
+            400,
+            [tom],
+            (255, 255, 255),
+            5,
+        ),
+        PolyLine(
+            [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 200],
+            4,
+            400,
+            [snare],
+            (150, 150, 255),
+            5,
+        ),
+        PolyLine(
+            [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 300],
+            5,
+            400,
+            [hi_hat],
+            (255, 100, 100),
+            5,
+        ),
     ]
 
     while running:

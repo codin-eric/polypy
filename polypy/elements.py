@@ -1,12 +1,14 @@
 import numpy as np
-import math
+from pathlib import Path
 import pygame
 from constants import ORANGE, quarter
 from decimal import getcontext, Decimal, ROUND_HALF_UP
 
 
 getcontext().rounding = ROUND_HALF_UP
-GLOBAL_SPEED = 0.005
+GLOBAL_SPEED = 0.01
+ROOT_DIR = Path(__file__).parent
+SOUNDS_DIR = ROOT_DIR / "sounds"
 
 
 class Note:
@@ -19,6 +21,12 @@ class Note:
 
     def play(self, duration):
         self.sound.play(maxtime=duration, fade_ms=100)
+
+
+class SampleNote(Note):
+    def __init__(self, file, volume=1):
+        self.sound = pygame.mixer.Sound(SOUNDS_DIR / file)
+        self.sound.set_volume(volume)
 
 
 class Circle:
@@ -112,7 +120,6 @@ class PolyLine:
         # print(f"dists: {dist} - {np.hypot(self.circle.speed[0], self.circle.speed[1])} - {self.vertex}")
 
         if dist < hyp_speed:
-            print(f"dist: {dist} - speed: {hyp_speed} - move_count: {self.move_count})")
             self.move_count = 0
             for sounds in self.note:
                 sounds.play(int(quarter / 2))

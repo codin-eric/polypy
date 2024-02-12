@@ -10,11 +10,12 @@ I saw a video about polyrhythms and I want do something like that with Python
         - Yi = Yo + d * sin(i * angle)
     - [X] Circle animation
     - [X] Flip Figures (upsidown)
-    - [] Speed should be dependent on vertex count
+    - [X] Speed should be dependent on vertex count
         When changing the speed the collision logic breaks :panik:
     - [] Speed over BPM X = Xo + d * (BPM/60) * t
     - [] Glow (blip flags)
 - [X] Audio
+    - [] Samples?
     - [] Different waves
     - [] ADSR
     - [] Sample
