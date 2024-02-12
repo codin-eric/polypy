@@ -77,8 +77,8 @@ class PolyLine:
 
         # Calculate the position of the next vertex
         for i in range(0, vertex):
-            x = pos[0] + size * np.cos(i * angle)
-            y = pos[1] + size * np.sin(i * angle)
+            x = pos[0] + size * np.cos(i * angle + np.pi)
+            y = pos[1] + size * np.sin(i * angle + np.pi)
 
             pos = [x, y]
             self.points.append(pos)

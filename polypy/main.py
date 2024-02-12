@@ -19,37 +19,37 @@ if __name__ == "__main__":
     pygame.mixer.init(size=-8, channels=2)
 
     line2 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 - 100, SCREEN_RESOLUTION[1] / 2 - 100],
+        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2],
         2,
-        200,
+        400,
         [Note(440, 25)],
         (255, 255, 255),
         5,
     )
     line3 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 - 100, SCREEN_RESOLUTION[1] / 2 - 25],
+        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 150],
         3,
-        200,
+        400,
         [Note(523, 10)],
         (200, 255, 100),
         5,
     )
 
     line4 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 - 100, SCREEN_RESOLUTION[1] / 2 - 175],
+        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 200],
         4,
-        200,
+        400,
         [Note(587, 17)],
         (150, 150, 255),
         5,
     )
 
     line5 = PolyLine(
-        [SCREEN_RESOLUTION[0] / 2 - 100, SCREEN_RESOLUTION[1] / 2 - 225],
+        [SCREEN_RESOLUTION[0] / 2 + 200, SCREEN_RESOLUTION[1] / 2 + 300],
         5,
-        200,
+        400,
         [Note(587, 17)],
-        (100, 100, 100),
+        (255, 100, 100),
         5,
     )
 
