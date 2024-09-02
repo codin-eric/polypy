@@ -1,13 +1,11 @@
 # pygame window and main loop
 import pygame
-from elements import Note, SampleNote, PolyLine
+from elements import Note, SampleNote, PolyLine, SCREEN_RESOLUTION
 
 
 BPM = 120
 note = 20000
 
-
-SCREEN_RESOLUTION = (1080, 1080)
 
 if __name__ == "__main__":
     pygame.init()

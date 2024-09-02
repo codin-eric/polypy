@@ -1,2 +1,7 @@
 ORANGE = (255, 165, 0)
+WHITE = (255, 255, 255)
+PURPLE = (128, 0, 128)
+
 quarter = 500
+
+SCREEN_RESOLUTION = (1920, 1920)
