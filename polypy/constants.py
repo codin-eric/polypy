@@ -1,6 +1,8 @@
 ORANGE = (255, 165, 0)
 WHITE = (255, 255, 255)
-PURPLE = (128, 0, 128)
+
+LIGHT_BLUE = (150, 150, 200)
+PURPLE = (128, 0, 200)
 
 quarter = 500
 

@@ -1,6 +1,6 @@
 # pygame window and main loop
 import pygame
-from elements import CircularMove
+from circle_elements import CircularMove
 
 
 BPM = 120
